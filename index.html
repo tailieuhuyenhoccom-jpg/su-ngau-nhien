@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sự Ngẫu Nhiên</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-out forwards',
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        /* A gentle, leaf-patterned background */
+        background-color: #f0f4c3;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23c5e1a5' fill-opacity='0.5'%3E%3Cpath fill-rule='evenodd' d='M11 0l5 20H6l5-20zm42 31a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM0 72h40v4H0v-4zm0-8h31.4v4H0v-4zm0-8h20v4H0v-4zm0-8h10v4H0v-4zm0-8h40v4H0v-4zm0-8h20v4H0v-4zm0-8h10v4H0v-4zm0-8h31.4v4H0v-4zm0-8h40v4H0v-4zm50 64h10v4H50v-4zm0-8h20v4H50v-4zm0-8h10v4H50v-4zm0-8h20v4H50v-4zm0-8h10v4H50v-4zm0-8h20v4H50v-4zm0-8h10v4H50v-4zm0-8h20v4H50v-4zM62 55a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm10-24a3 3 0 1 0 0-6 3 3 0 0 0 0 6z'/%3E%3C/g%3E%3C/svg%3E");
+        min-height: 100vh;
+      }
+      .text-shadow-sm {
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
