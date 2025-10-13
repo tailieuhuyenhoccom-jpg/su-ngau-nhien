@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 
 // --- Constants & Data ---
@@ -97,7 +98,7 @@ const LOCATION_LIST: string[] = [
     "Lima, Peru", "Lisbon, Bồ Đào Nha", "London, Vương quốc Anh", "Madrid, Tây Ban Nha", "Manila, Philippines",
     "Mexico City, Mexico", "Minsk, Belarus", "Moscow, Nga", "Nairobi, Kenya", "New Delhi, Ấn Độ",
     "Oslo, Na Uy", "Ottawa, Canada", "Paris, Pháp", "Prague, Cộng hòa Séc", "Riyadh, Ả Rập Xê Út",
-    "Rome, Ý", "Seoul, Hàn Quốc", "Singapore, Singapore", "Stockholm, Thụy Điển", "Tehran, Iran",
+    "Rome, Ý", "Seoul, Hàn Quốc", "Singapore, Singapore", "Stockholm, Thụy Sĩ", "Tehran, Iran",
     "Tokyo, Nhật Bản", "Vienna, Áo", "Warsaw, Ba Lan", "Washington, D.C., Hoa Kỳ", "Wellington, New Zealand"
 ];
 
@@ -241,6 +242,200 @@ const WEBSITE_LIST: Website[] = [
     { name: "Microsoft", description: "Trang chủ của tập đoàn công nghệ phần mềm và phần cứng." },
     { name: "Apple", description: "Trang giới thiệu sản phẩm và dịch vụ của Apple Inc." }
 ];
+
+const DECISION_LIST: string[] = [
+    "Có", "Không", "Chắc chắn rồi", "Không đời nào", "Hãy thử lại sau",
+    "Có lẽ", "Các dấu hiệu đều chỉ về 'Có'", "Đừng trông mong vào nó",
+    "Rất có khả năng", "Khá nghi ngờ", "Triển vọng không tốt lắm",
+    "Triển vọng rất tốt", "Hỏi lại đi", "Tập trung và hỏi lại"
+];
+
+const MOVIE_LIST: string[] = [
+    "Nhà Tù Shawshank (The Shawshank Redemption)", "Bố Già (The Godfather)", "Kỵ Sĩ Bóng Đêm (The Dark Knight)",
+    "Chuyện Tào Lao (Pulp Fiction)", "Bản Danh Sách Của Schindler (Schindler's List)", "Chúa Tể Những Chiếc Nhẫn: Sự Trở Lại Của Nhà Vua",
+    "Forrest Gump", "Sàn Đấu Sinh Tử (Fight Club)", "Kẻ Đánh Cắp Giấc Mơ (Inception)", "Ma Trận (The Matrix)",
+    "Chiến Hữu (Goodfellas)", "Chiến Tranh Giữa Các Vì Sao: Đế Chế Phản Công", "Chúa Tể Những Chiếc Nhẫn: Hiệp Hội Nhẫn Thần",
+    "Bay Trên Tổ Chim Cúc Cu (One Flew Over the Cuckoo's Nest)", "Bảy Tội Lỗi Chết Người (Se7en)", "Sự Im Lặng Của Bầy Cừu",
+    "Cuộc Sống Tươi Đẹp (It's a Wonderful life)", "Giải Cứu Binh Nhì Ryan (Saving Private Ryan)", "Vùng Đất Linh Hồn (Spirited Away)",
+    "Dặm Xanh (The Green Mile)", "Ký Sinh Trùng (Parasite)", "Hố Đen Tử Thần (Interstellar)", "Vua Sư Tử (The Lion King)",
+    "Võ Sĩ Giác Đấu (Gladiator)", "Ảo Thuật Gia Đấu Trí (The Prestige)", "Điệp Vụ Kép (The Departed)",
+    "Tay Trống Cự Phách (Whiplash)", "Tình Bạn Đẹp (The Intouchables)", "Quái Vật Không Gian (Alien)",
+    "Trở Lại Tương Lai (Back to the Future)", "Nghệ Sĩ Dương Cầm (The Pianist)", "Kẻ Tâm Thần (Psycho)",
+    "Sát Thủ Chuyên Nghiệp (Léon: The Professional)", "Kẻ Chủ Mưu (The Usual Suspects)", "Kẻ Hủy Diệt 2: Ngày Phán Xét",
+    "Thời Đại Tân Kỳ (Modern Times)", "Thành Phố Của Chúa (City of God)", "Mộ Đom Đóm (Grave of the Fireflies)",
+    "Chuyện Tình Casablanca (Casablanca)", "Ngôi Nhà Ma (The Shining)", "Hành Trình Django (Django Unchained)",
+    "Robot Biết Yêu (WALL·E)", "Gã Hề (Joker)", "Cỗ Máy Con Cưng (A Clockwork Orange)", "Tài Xế Taxi (Taxi Driver)",
+    "Cuộc Đời Của Amélie Poulain (Amélie)", "Ánh Dương Vĩnh Cửu Của Tâm Hồn Tinh Khiết", "Chàng Will Tốt Bụng (Good Will Hunting)",
+    "Câu Chuyện Đồ Chơi (Toy Story)", "Max Điên: Con Đường Cuồng Nộ (Mad Max: Fury Road)"
+];
+
+const SYMBOL_LIST: { name: string; svg: string }[] = [
+  { name: 'Chó', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5z"/><path d="M8 7a4 4 0 0 0-4 4v1a4 4 0 0 0 4 4"/><path d="M16 7a4 4 0 0 1 4 4v1a4 4 0 0 1-4 4"/><path d="M12 17v3a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-3"/><path d="M12 17v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M12 11.5a.5.5 0 0 1-.5-.5v-1a.5.5 0 1 1 1 0v1a.5.5 0 0 1-.5.5z"/><path d="M10 9.5a.5.5 0 0 1 0-1h.5a.5.5 0 0 1 0 1h-.5z"/><path d="M14 9.5a.5.5 0 0 0 0-1h-.5a.5.5 0 0 0 0 1h.5z"/></svg>' },
+  { name: 'Mèo', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4C7.58 4 4 7.58 4 12s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8z"/><path d="M9 4.5l-3 3"/><path d="M15 4.5l3 3"/><path d="M10 14c-.5-1-1.5-1-2 0"/><path d="M14 14c.5-1 1.5-1 2 0"/><path d="M12 12v3"/></svg>' },
+  { name: 'Sư tử', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12m-3 0a3 3 0 1 0 6 0 3 3 0 1 0-6 0"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M22 12h-2"/><path d="M4 12H2"/><path d="M19.07 4.93l-1.41 1.41"/><path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 19.07l-1.41-1.41"/><path d="M6.34 6.34L4.93 4.93"/><path d="M12 15v5"/><path d="M9 20h6"/></svg>' },
+  { name: 'Hổ', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6z"/><path d="M7 6l-2 2"/><path d="M17 6l2 2"/><path d="M12 15v3"/><path d="M9 18h6"/><path d="M8 10l-1.5 1.5"/><path d="M16 10l1.5 1.5"/><path d="M12 12l1 2 1-2"/><path d="M9 12h6"/></svg>' },
+  { name: 'Voi', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4a4 4 0 0 1 4 4v2"/><path d="M16 4a4 4 0 0 0-4 4v2"/><path d="M12 10c-4 0-8 3-8 7h16c0-4-4-7-8-7z"/><path d="M4 17v3h2"/><path d="M20 17v3h-2"/><path d="M12 10v4c0 3-2 5-2 5"/></svg>' },
+  { name: 'Gấu', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8z"/><circle cx="9.5" cy="9.5" r="1.5"/><circle cx="14.5" cy="9.5" r="1.5"/><path d="M12 12c-1 0-2 1-2 2s1 2 2 2 2-1 2-2-1-2-2-2z"/></svg>' },
+  { name: 'Hươu cao cổ', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-8"/><path d="M9 13h6"/><path d="M12 13L8 5h8z"/><circle cx="9" cy="4" r="1"/><circle cx="15" cy="4" r="1"/><path d="M6 21h2"/><path d="M16 21h2"/></svg>' },
+  { name: 'Khỉ', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z"/><path d="M9 4a3 3 0 0 0-3 3v0"/><path d="M15 4a3 3 0 0 1 3 3v0"/><path d="M12 16c-3 0-6 2-6 4h12c0-2-3-4-6-4z"/><path d="M18 14a6 6 0 0 0-6-6 6 6 0 0 0-6 6"/></svg>' },
+  { name: 'Cá sấu', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12l2-2h16l2 2-2 2H4z"/><path d="M4 14l-2 2h20l-2-2"/><path d="M9 10V8"/><path d="M15 10V8"/><path d="M6 14v2h2"/><path d="M18 14v2h-2"/></svg>' },
+  { name: 'Rắn', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s2-4 6-4 6 8 10 8 4-4 4-4"/><circle cx="6" cy="12" r="1" fill="currentColor"/></svg>' },
+  { name: 'Cá mập', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12l8-4 10 4-10 4-8-4z"/><path d="M10 8v10"/><path d="M12 4v4l-2-1 2 1"/></svg>' },
+  { name: 'Cá voi', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c0-4 4-8 10-8s10 4 10 8c0 4-4 8-10 8-10 0-10-4-10-8z"/><path d="M7 10h1M18 14l-4-2 4-2"/><path d="M12 4V2"/></svg>' },
+  { name: 'Bạch tuộc', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z"/><path d="M5 12c0-2 2-4 4-4"/><path d="M19 12c0-2-2-4-4-4"/><path d="M5 12c0 2 2 4 4 4"/><path d="M19 12c0 2-2 4-4 4"/><path d="M8 16v4"/><path d="M16 16v4"/><path d="M12 16v4"/></svg>' },
+  { name: 'Cua', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8-8-3.58-8-8z"/><path d="M4 8l-2-2 2-2"/><path d="M20 8l2-2-2-2"/><path d="M6 14H2"/><path d="M18 14H22"/><path d="M9 11v2"/><path d="M15 11v2"/></svg>' },
+  { name: 'Tôm hùm', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8c-2 0-4 2-4 4v4h8v-4c0-2-2-4-4-4z"/><path d="M8 8l-4-4"/><path d="M16 8l4-4"/><path d="M12 16v4"/><path d="M10 20h4"/><path d="M8 12H4"/><path d="M16 12H20"/></svg>' },
+  { name: 'Gà', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4c-3 0-5 2-5 4 0 3 4 6 5 6s5-3 5-6c0-2-2-4-5-4z"/><path d="M8 14v4h8v-4"/><path d="M12 2v2"/><path d="M11 4h2"/></svg>' },
+  { name: 'Vịt', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3 0-5 2-5 4s2 4 5 4 5-2 5-4-2-4-5-4z"/><path d="M7 10c0 4 5 8 5 8s5-4 5-8-2-4-5-4-5 0-5 4z"/><path d="M16 6h2"/></svg>' },
+  { name: 'Ngựa', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h3l2-3h4l2 3h3v5l-3 4H8z"/><path d="M8 14v6h2"/><path d="M14 14v6h2"/><path d="M8 5V2"/><path d="M16 5V2"/></svg>' },
+  { name: 'Lợn', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><circle cx="12" cy="12" r="3"/><path d="M10 8L8 6"/><path d="M14 8L16 6"/><path d="M12 15v2"/><path d="M10 17h4"/></svg>' },
+  { name: 'Cừu', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z"/><path d="M8 6a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M16 6a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M12 14c-4 0-8 2-8 5h16c0-3-4-5-8-5z"/></svg>' },
+  { name: 'Bò', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 8h8v6H8z"/><path d="M8 5L6 3"/><path d="M16 5L18 3"/><path d="M10 17v-2h4v2"/></svg>' },
+  { name: 'Chuột túi', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5a4 4 0 0 1 4-4 4 4 0 0 1 4 4v2a4 4 0 0 1-4 4 4 4 0 0 1-4-4V5z"/><path d="M12 9v8"/><path d="M9 17L5 21"/><path d="M15 17l4 4"/><path d="M10 14h4"/><path d="M10 5V3"/><path d="M14 5V3"/></svg>' },
+  { name: 'Chim cánh cụt', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3.31 0-6 2.69-6 6v8c0 3.31 2.69 6 6 6s6-2.69 6-8V8c0-3.31-2.69-6-6-6z"/><path d="M12 8m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0"/><path d="M9 18h6"/><path d="M7 12l-3-2v4l3-2z"/><path d="M17 12l3-2v4l-3-2z"/></svg>' },
+  { name: 'Cú', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><circle cx="9" cy="10" r="2"/><circle cx="15" cy="10" r="2"/><path d="M12 14l-1-2h2z"/><path d="M10 4L8 2"/><path d="M14 4L16 2"/></svg>' },
+  { name: 'Đại bàng', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l-8 8h4v12h8V10h4z"/><path d="M12 6c-2 0-3 1-3 2h6c0-1-1-2-3-2z"/></svg>' },
+  { name: 'Bướm', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="M12 4c-4 0-8 4-8 8s4 8 8 8"/><path d="M12 4c4 0 8 4 8 8s-4 8-8 8"/><path d="M18 4l-2 2"/><path d="M6 4l2 2"/></svg>' },
+  { name: 'Ong', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z"/><path d="M4 12h16"/><path d="M12 4V2"/><path d="M12 20v2"/><path d="M7 7l-2-2"/><path d="M17 7l2-2"/><path d="M7 17l-2 2"/><path d="M17 17l2 2"/></svg>' },
+  { name: 'Ốc sên', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h18v2H2z"/><path d="M12 18c0-4.42 3.58-8 8-8v0"/><path d="M12 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path d="M6 4L4 2"/><path d="M8 4L10 2"/></svg>' },
+  { name: 'Cáo', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l6-8h6l6 8-6 8H9z"/><path d="M12 12l-3-4"/><path d="M12 12l3-4"/><path d="M9 20l-3-4h12l-3 4"/></svg>' },
+  { name: 'Sói', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l-8 6 8 10 8-10z"/><path d="M12 4v8l-4 4"/><path d="M12 12l4 4"/><path d="M8 2L4 4"/><path d="M16 2l4 4"/></svg>' },
+  { name: 'Dơi', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"/><path d="M12 2v20"/><path d="M12 2L2 12l10 10 10-10z"/></svg>' },
+  { name: 'Rùa', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 8v8"/><path d="M8 12h8"/><path d="M6 6l-2-2"/><path d="M18 6l2-2"/><path d="M6 18l-2 2"/><path d="M18 18l2 2"/></svg>' },
+  { name: 'Hà mã', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10c0-4.42 3.58-8 8-8s8 3.58 8 8v4c0 4.42-3.58 8-8 8s-8-3.58-8-8v-4z"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="9" r="1"/><path d="M9 14h6"/></svg>' },
+  { name: 'Tê giác', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h6l2-4 2 4h6v4H4z"/><path d="M8 16v4h2"/><path d="M14 16v4h2"/><path d="M12 8V4"/><circle cx="17" cy="9" r="1"/></svg>' },
+  { name: 'Lạc đà', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18v-8c0-3.31 2.69-6 6-6h4c3.31 0 6 2.69 6 6v8"/><path d="M8 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/><path d="M16 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/><path d="M4 18h2"/><path d="M18 18h2"/></svg>' },
+  { name: 'Cá heo', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c0-4 4-6 8-6s8 2 8 6-4 6-8 6-8-2-8-6z"/><path d="M18 12c0-4 2-6 4-6"/><circle cx="15" cy="11" r="1"/></svg>' },
+  { name: 'Cá vàng', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c0-4 4-6 8-6s8 2 8 6-4 6-8 6-8-2-8-6z"/><path d="M18 12l4-2-4-2v4z"/></svg>' },
+  { name: 'Kỳ lân', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h3l2-3h4l2 3h3v5l-3 4H8z"/><path d="M8 14v6h2"/><path d="M14 14v6h2"/><path d="M8 5V2"/><path d="M16 5V2"/><path d="M12 2l-1 4h2z"/></svg>' },
+  { name: 'Gấu trúc', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 9a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M16 9a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M12 12m-3 0a3 3 0 1 0 6 0 3 3 0 1 0-6 0"/></svg>' },
+  { name: 'Koala', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 6a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M16 6a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M12 12m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0"/></svg>' },
+  { name: 'Hải cẩu', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c0-4 4-8 10-8s10 4 10 8-4 8-10 8-10-4-10-8z"/><path d="M10 12h4"/><path d="M12 12l2 2"/><path d="M12 12l-2 2"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/></svg>' },
+  { name: 'Chim hồng hạc', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3 0-5 2-5 4s2 4 5 4 5-2 5-4-2-4-5-4z"/><path d="M12 10v10"/><path d="M8 20h8"/><path d="M12 10s-4 4-4 8"/></svg>' },
+  { name: 'Công', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12m-3 0a3 3 0 1 0 6 0 3 3 0 1 0-6 0"/><path d="M12 2c5 0 10 5 10 10s-5 10-10 10"/><path d="M2 12c0-5 5-10 10-10"/><path d="M12 15v7"/></svg>' },
+  { name: 'Vẹt', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-4 0-7 3-7 7s3 7 7 7 7-3 7-7-3-7-7-7z"/><path d="M12 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path d="M12 16a4 4 0 0 0 4-4h-8a4 4 0 0 0 4 4z"/></svg>' },
+  { name: 'Kền kền', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-4 0-8 4-8 8v4h16v-4c0-4-4-8-8-8z"/><path d="M12 14v8"/><path d="M9 22h6"/><path d="M12 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>' },
+  { name: 'Chuồn chuồn', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M2 12h20"/><path d="M6 8l-4-4"/><path d="M18 8l4-4"/><path d="M6 16l-4 4"/><path d="M18 16l4 4"/></svg>' },
+  { name: 'Nhện', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M2 12h20"/><path d="M5 5l14 14"/><path d="M19 5l-14 14"/><circle cx="12" cy="12" r="3"/><path d="M12 6V2"/><path d="M12 18v4"/><path d="M6 12H2"/><path d="M18 12h4"/></svg>' },
+  { name: 'Bọ cạp', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8c-2 0-4 2-4 4s2 4 4 4 4-2 4-4-2-4-4-4z"/><path d="M12 16v4l2 2"/><path d="M4 12H2"/><path d="M20 12h2"/><path d="M6 10l-2-2"/><path d="M18 10l2-2"/><path d="M6 14l-2 2"/><path d="M18 14l2 2"/></svg>' },
+  { name: 'Kiến', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="6" cy="6" r="2"/><circle cx="18" cy="18" r="2"/><path d="M12 15l6 3"/><path d="M12 9L6 6"/><path d="M4 10l-2-2"/><path d="M20 14l2 2"/><path d="M10 4l-2-2"/><path d="M14 20l2 2"/></svg>' },
+  { name: 'Thằn lằn', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s2-6 8-6 10 4 10 4-2 6-8 6-10-4-10-4z"/><path d="M16 10v6l-4 4"/><path d="M4 14l-2 2"/><path d="M20 10l2-2"/></svg>' },
+  { name: 'Ếch', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12c0-4.42 3.58-8 8-8s8 3.58 8 8v4H4z"/><circle cx="8" cy="10" r="2"/><circle cx="16" cy="10" r="2"/><path d="M6 16v4h2"/><path d="M18 16v4h-2"/></svg>' },
+  { name: 'Châu chấu', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8c-3 0-5 2-5 4s2 4 5 4 5-2 5-4-2-4-5-4z"/><path d="M12 16v4"/><path d="M9 20h6"/><path d="M6 8l-2-4"/><path d="M18 8l2-4"/><path d="M8 12L4 8"/><path d="M16 12l4-4"/></svg>' },
+  { name: 'Cá sấu Mỹ', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12l2-2h16l2 2-2 2H4z"/><path d="M4 14l-2 2h20l-2-2"/><path d="M7 10V8m10 2V8M7 14v2m10-2v2"/><path d="M7 10h10M7 14h10"/></svg>' },
+  { name: 'Gấu túi', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 6a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M16 6a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M12 12m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0"/></svg>' },
+  { name: 'Lười', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M9 10c0-1.66 1.34-3 3-3s3 1.34 3 3"/><path d="M9 14h6"/><path d="M8 18l-4-4"/><path d="M16 18l4-4"/></svg>' },
+  { name: 'Hải ly', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12c0-4.42 3.58-8 8-8s8 3.58 8 8v4h-4v-2h-8v2H4z"/><path d="M9 8h2"/><path d="M13 8h2"/><path d="M8 16h8v2H8z"/></svg>' },
+  { name: 'Chuột', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="M12 12c-2 0-4-2-4-4s2-4 4-4"/><path d="M18 12c-3 4-9 4-12 0"/></svg>' },
+  { name: 'Thỏ', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6z"/><path d="M10 2L8 6"/><path d="M14 2l2 6"/><path d="M11 14h2"/><path d="M12 12v2"/></svg>' },
+  { name: 'Sóc', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12c0-4 4-6 8-6s8 2 8 6-4 10-8 10-8-6-8-10z"/><path d="M12 2L8 6"/><path d="M16 18c4 0 6-4 6-8"/></svg>' },
+  { name: 'Chồn', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c0-4 4-8 10-8s10 4 10 8c0 4-4 8-10 8-10 0-10-4-10-8z"/><path d="M12 12c-2 0-4-1-4-2s2-2 4-2 4 1 4 2-2 2-4 2z"/><path d="M21 12H3"/></svg>' },
+  { name: 'Lửng', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8-8-3.58-8-8z"/><path d="M4 12h16"/><path d="M12 4v16"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="9" r="1"/></svg>' },
+  { name: 'Dê', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l-4-3"/><path d="M16 5l4-3"/><path d="M12 2c-3 0-5 2-5 4v2c0 2 2 4 5 4s5-2 5-4V6c0-2-2-4-5-4z"/><path d="M12 12v10"/><path d="M8 22h8"/><path d="M12 16h-1"/></svg>' },
+  { name: 'Llama', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4a4 4 0 0 1 4-4 4 4 0 0 1 4 4v10c0 2.21-1.79 4-4 4s-4-1.79-4-4V4z"/><path d="M12 18v4"/><path d="M9 22h6"/><path d="M10 4V2"/><path d="M14 4V2"/></svg>' },
+  { name: 'Gấu mèo', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 8h8v8H8z"/><path d="M12 12l4 4"/><path d="M12 12l-4 4"/><path d="M18 18l4 4"/></svg>' },
+  { name: 'Hải mã', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10c0-4.42 3.58-8 8-8s8 3.58 8 8v4h-4v-2h-8v2H4z"/><path d="M9 8h2"/><path d="M13 8h2"/><path d="M8 14v4"/><path d="M16 14v4"/></svg>' },
+  { name: 'Nhím', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 12l10 10 10-10z"/><path d="M12 2v20"/><path d="M2 12h20"/><path d="M7 7l-3-3"/><path d="M17 7l3-3"/><path d="M7 17l-3 3"/><path d="M17 17l3 3"/></svg>' },
+  { name: 'Kangaroo', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5a4 4 0 0 1 4-4 4 4 0 0 1 4 4v2a4 4 0 0 1-4 4 4 4 0 0 1-4-4V5z"/><path d="M12 9v8"/><path d="M9 17L5 21"/><path d="M15 17l4 4"/><path d="M10 14h4"/><path d="M10 5V3"/><path d="M14 5V3m-6 11H6"/><path d="M14 14h2"/></svg>' },
+  { name: 'Ngựa vằn', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h3l2-3h4l2 3h3v5l-3 4H8z"/><path d="M8 14v6h2"/><path d="M14 14v6h2"/><path d="M8 5V2"/><path d="M16 5V2"/><path d="M3 7h18M3 9h18M3 11h18"/></svg>' },
+  { name: 'Chim gõ kiến', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-4 0-7 3-7 7v8h14V9c0-4-3-7-7-7z"/><path d="M12 2v4"/><path d="M12 17v5"/><path d="M9 22h6"/><path d="M12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>' },
+  { name: 'Rái cá', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c0-4 4-8 10-8s10 4 10 8-4 8-10 8-10-4-10-8z"/><path d="M10 12h4"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M8 14s-2 2 0 2 4-2 4-2"/></svg>' },
+  { name: 'Báo', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6z"/><path d="M7 6l-2 2"/><path d="M17 6l2 2"/><path d="M12 15v3"/><path d="M9 18h6"/><circle cx="10" cy="10" r="1"/><circle cx="14" cy="10" r="1"/><circle cx="12" cy="13" r="1"/></svg>' },
+  { name: 'Chồn hôi', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c0-4 4-8 10-8s10 4 10 8c0 4-4 8-10 8-10 0-10-4-10-8z"/><path d="M12 2v20"/><path d="M12 12c-2 0-4-1-4-2s2-2 4-2 4 1 4 2-2 2-4 2z"/></svg>' },
+  { name: 'Lạc đà Alpaca', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4a4 4 0 0 1 4-4 4 4 0 0 1 4 4v10c0 2.21-1.79 4-4 4s-4-1.79-4-4V4z"/><path d="M12 18v4"/><path d="M9 22h6"/><path d="M8 6a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M16 6a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>' },
+  { name: 'Tinh tinh', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z"/><path d="M9 4a3 3 0 0 0-3 3v0"/><path d="M15 4a3 3 0 0 1 3 3v0"/><path d="M12 16c-3 0-6 2-6 4h12c0-2-3-4-6-4z"/><path d="M8 12h8"/></svg>' },
+  { name: 'Khỉ đột', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10c0-4.42 3.58-8 8-8s8 3.58 8 8v4h-4v-2h-8v2H4z"/><path d="M12 14c-2 0-4 2-4 4h8c0-2-2-4-4-4z"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="9" r="1"/></svg>' },
+  { name: 'Hồng hạc', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3 0-5 2-5 4s2 4 5 4 5-2 5-4-2-4-5-4z"/><path d="M12 10v10"/><path d="M8 20h8"/><path d="M12 10s-4 4-4 8"/></svg>' },
+  { name: 'Cá sấu Gharial', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12l2-2h16l2 2-2 2H4z"/><path d="M4 14l-2 2h20l-2-2"/><path d="M7 10h10v-2H7z"/><path d="M9 8V6"/><path d="M15 8V6"/></svg>' },
+  { name: 'Sứa', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c0-5.52 4.48-10 10-10s10 4.48 10 10"/><path d="M6 12v8"/><path d="M10 12v8"/><path d="M14 12v8"/><path d="M18 12v8"/></svg>' },
+  { name: 'Sao biển', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.31L22 9.27l-5 4.87 1.18 6.88L12 17.27l-6.18 3.73L7 14.14 2 9.27l6.91-1.04L12 2Z"/></svg>' },
+  { name: 'Cá ngựa', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3 0-5 2-5 4s2 4 5 4 5-2 5-4-2-4-5-4z"/><path d="M12 10v4c0 3 3 4 3 4s-3-1-3-4-2 0-2 4c0 0 1-4 4-4"/></svg>' },
+  { name: 'Rái cá biển', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c0-4 4-8 10-8s10 4 10 8-4 8-10 8-10-4-10-8z"/><path d="M10 12h4"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M10 14h4v-1h-4z"/></svg>' },
+  { name: 'Cá đuối', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12l10 10L22 12 12 2 2 12Z"/><path d="M12 12l8 8"/></svg>' },
+  { name: 'Cá nóc', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 2v20"/><path d="M2 12h20"/><path d="M7 7l-2-2"/><path d="M17 7l2-2"/><path d="M7 17l-2 2"/><path d="M17 17l2 2"/></svg>' },
+];
+
+const QUOTE_LIST: string[] = [
+  "Cách duy nhất để làm được việc lớn là yêu những gì bạn làm. - Steve Jobs",
+  "Cuộc sống là những gì xảy ra khi bạn đang bận rộn lập ra những kế hoạch khác. - John Lennon",
+  "Hãy là sự thay đổi mà bạn muốn thấy trên thế giới. - Mahatma Gandhi",
+  "Không phải ai lang thang cũng đều đi lạc. - J.R.R. Tolkien",
+  "Chỉ có hai điều là vô hạn: vũ trụ và sự ngu ngốc của con người, và tôi không chắc về điều đầu tiên. - Albert Einstein",
+  "Bạn chỉ sống một lần, nhưng nếu bạn làm đúng, một lần là đủ. - Mae West",
+  "Trong ba từ, tôi có thể tóm tắt mọi thứ tôi đã học về cuộc sống: nó vẫn tiếp diễn. - Robert Frost",
+  "Để là chính mình trong một thế giới không ngừng cố gắng biến bạn thành một người khác là thành tựu lớn nhất. - Ralph Waldo Emerson",
+  "Tương lai thuộc về những người tin vào vẻ đẹp của những giấc mơ của họ. - Eleanor Roosevelt",
+  "Thà bị ghét vì con người thật của bạn, còn hơn được yêu vì con người không phải là bạn. - André Gide",
+  "Hành trình ngàn dặm bắt đầu từ một bước chân. - Lão Tử",
+  "Cuộc sống không phải là chờ đợi cơn bão qua đi, mà là học cách khiêu vũ dưới mưa. - Vivian Greene",
+  "Thành công không phải là chìa khóa của hạnh phúc. Hạnh phúc là chìa khóa của thành công. - Albert Schweitzer",
+  "Hãy mơ như thể bạn sẽ sống mãi. Hãy sống như thể bạn sẽ chết hôm nay. - James Dean",
+  "Vinh quang lớn nhất của chúng ta không phải là không bao giờ vấp ngã, mà là đứng dậy mỗi khi chúng ta ngã. - Khổng Tử",
+  "Hãy bận rộn sống hoặc bận rộn chết. - Stephen King",
+  "Tất cả những giấc mơ của chúng ta đều có thể trở thành hiện thực nếu chúng ta có can đảm để theo đuổi chúng. - Walt Disney",
+  "Nếu bạn nhìn vào những gì bạn có trong cuộc sống, bạn sẽ luôn có nhiều hơn. Nếu bạn nhìn vào những gì bạn không có, bạn sẽ không bao giờ có đủ. - Oprah Winfrey",
+  "Thời gian của bạn có hạn, đừng lãng phí nó để sống cuộc đời của người khác. - Steve Jobs",
+  "Thất bại là gia vị mang lại hương vị cho thành công. - Truman Capote",
+  "Chỉ những người dám thất bại lớn mới có thể đạt được thành công lớn. - Robert F. Kennedy",
+  "Logic sẽ đưa bạn từ A đến B. Trí tưởng tượng sẽ đưa bạn đi khắp mọi nơi. - Albert Einstein",
+  "Giáo dục là vũ khí mạnh nhất mà bạn có thể sử dụng để thay đổi thế giới. - Nelson Mandela",
+  "Không gì là không thể, bản thân từ đó đã nói 'I'm possible'! - Audrey Hepburn",
+  "Người không mắc sai lầm là người không thử làm bất cứ điều gì mới. - Albert Einstein",
+  "Hãy giữ khuôn mặt bạn luôn hướng về ánh mặt trời, và bóng tối sẽ đổ lại sau lưng bạn. - Walt Whitman",
+  "Một người bạn là người biết tất cả về bạn và vẫn yêu bạn. - Elbert Hubbard",
+  "Điều đẹp đẽ nhất chúng ta có thể trải nghiệm là sự bí ẩn. - Albert Einstein",
+  "Hãy sống cuộc sống của bạn đến mức trọn vẹn nhất. - Ernest Hemingway",
+  "Thử thách là những gì làm cho cuộc sống trở nên thú vị, và vượt qua chúng là những gì làm cho cuộc sống có ý nghĩa. - Joshua J. Marine",
+  "Để tránh bị chỉ trích: không nói gì cả, không làm gì cả, không là gì cả. - Aristotle",
+  "Tất cả những gì chúng ta phải quyết định là phải làm gì với thời gian được ban cho chúng ta. - J.R.R. Tolkien",
+  "Cuộc sống thu hẹp hoặc mở rộng tùy theo lòng can đảm của một người. - Anais Nin",
+  "Không có gì cao quý trong việc vượt trội hơn người khác; sự cao quý thực sự nằm ở việc vượt trội hơn chính bản thân mình trước đây. - Ernest Hemingway",
+  "Hãy tin rằng bạn có thể và bạn đã đi được nửa đường. - Theodore Roosevelt",
+  "Tôi có thể chấp nhận thất bại, mọi người đều thất bại ở một việc gì đó. Nhưng tôi không thể chấp nhận việc không cố gắng. - Michael Jordan",
+  "Nếu bạn muốn nâng mình lên, hãy nâng người khác lên. - Booker T. Washington",
+  "Những tâm trí vĩ đại thảo luận về ý tưởng; những tâm trí trung bình thảo luận về sự kiện; những tâm trí nhỏ bé thảo luận về con người. - Eleanor Roosevelt",
+  "Trở ngại không cần phải ngăn cản bạn. Nếu bạn gặp một bức tường, đừng quay đầu và bỏ cuộc. Hãy tìm cách trèo qua nó, đi xuyên qua nó, hoặc đi vòng qua nó. - Michael Jordan",
+  "Bắt đầu từ nơi bạn đứng. Sử dụng những gì bạn có. Làm những gì bạn có thể. - Arthur Ashe",
+  "Bạn bỏ lỡ 100% những cú sút bạn không thực hiện. - Wayne Gretzky",
+  "Hai mươi năm nữa, bạn sẽ thất vọng về những điều bạn không làm hơn là những điều bạn đã làm. - Mark Twain",
+  "Hãy xây dựng giấc mơ của riêng bạn, nếu không người khác sẽ thuê bạn để xây dựng giấc mơ của họ. - Farrah Gray",
+  "Mọi thứ bạn từng mong muốn đều nằm ở phía bên kia của sự sợ hãi. - George Addair",
+  "Cuộc sống giống như đi xe đạp. Để giữ thăng bằng, bạn phải tiếp tục di chuyển. - Albert Einstein",
+  "Hãy sống cuộc đời mà bạn yêu. Hãy yêu cuộc đời mà bạn sống. - Bob Marley",
+  "Thành công là đi từ thất bại này đến thất bại khác mà không mất đi lòng nhiệt huyết. - Winston Churchill",
+  "Những người đủ điên rồ để nghĩ rằng họ có thể thay đổi thế giới chính là những người làm được điều đó. - Steve Jobs",
+  "Cái giá của bất cứ điều gì là lượng sống mà bạn đổi lấy nó. - Henry David Thoreau",
+  "Hãy làm điều gì đó hôm nay mà bản thân bạn trong tương lai sẽ cảm ơn. - Sean Patrick Flanery",
+  "Đừng chờ đợi. Thời gian sẽ không bao giờ là 'vừa đúng'. - Napoleon Hill",
+  "Nếu cơ hội không gõ cửa, hãy xây một cánh cửa. - Milton Berle",
+  "Hành động là chìa khóa nền tảng cho mọi thành công. - Pablo Picasso",
+  "Chỉ cần nhớ rằng có người ngoài kia hạnh phúc với ít hơn những gì bạn có. - Khuyết danh",
+  "Bạn không thể bắt đầu chương tiếp theo của cuộc đời nếu bạn cứ đọc lại chương trước. - Khuyết danh",
+  "Đừng bao giờ hối tiếc một ngày nào trong cuộc đời bạn. Những ngày tốt đẹp mang lại hạnh phúc, những ngày tồi tệ mang lại kinh nghiệm, những ngày tồi tệ nhất mang lại bài học, và những ngày tốt nhất mang lại kỷ niệm. - Khuyết danh",
+  "Sự khác biệt giữa bình thường và phi thường là một chút 'thêm' đó. - Jimmy Johnson",
+  "Hãy là một giọng nói, không phải là một tiếng vọng. - Khuyết danh",
+  "Hãy làm việc chăm chỉ trong im lặng, hãy để thành công của bạn lên tiếng. - Frank Ocean",
+  "Đôi khi chúng ta được thử thách không phải để thể hiện điểm yếu của mình, mà là để khám phá sức mạnh của mình. - Khuyết danh",
+  "Hạnh phúc không phải là một điểm đến, nó là một cách sống. - Burton Hills",
+  "Những điều tốt đẹp đến với những người chờ đợi, nhưng những điều tốt hơn đến với những người nỗ lực và làm bất cứ điều gì để có được chúng. - Khuyết danh",
+  "Can đảm không phải là không có sợ hãi, mà là khả năng hành động bất chấp sợ hãi. - Khuyết danh",
+  "Bạn không thể có một ngày mai tốt đẹp hơn nếu bạn vẫn đang nghĩ về ngày hôm qua. - Charles F. Kettering",
+  "Hãy là người mà bạn cần khi bạn còn trẻ. - Khuyết danh",
+  "Cuộc sống không có điều khiển từ xa, bạn phải đứng dậy và tự mình thay đổi nó. - Khuyết danh",
+  "Nếu bạn không thích điều gì đó, hãy thay đổi nó. Nếu bạn không thể thay đổi nó, hãy thay đổi thái độ của bạn. - Maya Angelou",
+  "Đừng đánh giá mỗi ngày bằng những gì bạn gặt hái được, mà bằng những hạt giống bạn đã gieo. - Robert Louis Stevenson",
+  "Hãy yêu tất cả, tin tưởng một vài người, làm sai không ai cả. - William Shakespeare",
+  "Cách tốt nhất để dự đoán tương lai là tạo ra nó. - Peter Drucker",
+  "Hãy là phiên bản hạng nhất của chính bạn, không phải là phiên bản hạng hai của người khác. - Judy Garland",
+  "Một cuộc sống không được kiểm nghiệm thì không đáng sống. - Socrates",
+  "Hãy cứ đói khát, hãy cứ dại khờ. - Steve Jobs",
+  "Đừng để ngày hôm qua chiếm quá nhiều của ngày hôm nay. - Will Rogers",
+  "Một con tàu trong bến cảng thì an toàn, nhưng đó không phải là mục đích của những con tàu. - John A. Shedd",
+  "Bạn càng đọc nhiều, bạn càng biết nhiều. Bạn càng học nhiều, bạn càng đi nhiều nơi. - Dr. Seuss",
+  "Mọi thứ đều có vẻ đẹp, nhưng không phải ai cũng thấy được nó. - Khổng Tử",
+
+];
+
 
 const UPPERCASE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const LOWERCASE_CHARS = 'abcdefghijklmnopqrstuvwxyz';
@@ -1136,10 +1331,413 @@ const WebsiteApp = ({ onBack }: { onBack: () => void }) => {
   );
 };
 
+// --- Decision App ---
+const DecisionApp = ({ onBack }: { onBack: () => void }) => {
+  const [decision, setDecision] = useState<string>('');
+  const [key, setKey] = useState<number>(0);
+
+  const getNewDecision = useCallback(() => {
+    const randomIndex = Math.floor(Math.random() * DECISION_LIST.length);
+    setDecision(DECISION_LIST[randomIndex]);
+    setKey(prevKey => prevKey + 1);
+  }, []);
+
+  useEffect(() => {
+    getNewDecision();
+  }, [getNewDecision]);
+
+  return (
+    <PageContainer title="Quyết Định Ngẫu Nhiên" onBack={onBack}>
+      <div className="bg-purple-50/70 backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-lg border border-purple-200/50">
+        <div className="text-center min-h-[100px] flex items-center justify-center p-4">
+          {decision && (
+            <p key={key} className="text-xl sm:text-2xl text-purple-800 font-medium animate-fade-in text-shadow-sm">
+              "{decision}"
+            </p>
+          )}
+        </div>
+        <div className="mt-8 text-center">
+          <button
+            onClick={getNewDecision}
+            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-purple-300"
+            aria-label="Đưa ra một quyết định ngẫu nhiên mới"
+          >
+            Quyết định khác
+          </button>
+        </div>
+      </div>
+    </PageContainer>
+  );
+};
+
+// --- Slot Machine App ---
+const SLOT_SYMBOLS = [
+  '🍒', '🍋', '🍊', '🍉', '🔔', '⭐', '💎', '🍀',
+  '🍒', '🍋', '🍊', '🍉', '🔔', '⭐', '💎',
+  '🍒', '🍋', '🍊', '🍉', '🔔', '⭐',
+  '🍒', '🍋', '🍊', '🍉',
+  '7️⃣' 
+];
+
+const getRandomSymbol = () => SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)];
+
+type ReelProps = {
+  symbol: string;
+  spinning: boolean;
+};
+
+const Reel: React.FC<ReelProps> = ({ symbol, spinning }) => (
+  <div className={`w-24 h-32 sm:w-28 sm:h-36 bg-white/80 rounded-lg shadow-inner flex items-center justify-center transition-all duration-300 ${spinning ? 'blur-sm' : ''}`}>
+    <span className="text-5xl sm:text-6xl animate-fade-in">{symbol}</span>
+  </div>
+);
+
+const SlotMachineApp = ({ onBack }: { onBack: () => void }) => {
+  const [reels, setReels] = useState<string[]>(['🍒', '🍋', '🍊']);
+  const [isSpinning, setIsSpinning] = useState<boolean>(false);
+  const [resultMessage, setResultMessage] = useState<string>('Nhấn nút để quay!');
+  const spinIntervals = useRef<number[]>([]);
+
+  const handleSpin = useCallback(() => {
+    if (isSpinning) return;
+
+    setIsSpinning(true);
+    setResultMessage('');
+    
+    const finalReels = [getRandomSymbol(), getRandomSymbol(), getRandomSymbol()];
+
+    spinIntervals.current.forEach(clearInterval);
+    spinIntervals.current = [];
+
+    for (let i = 0; i < 3; i++) {
+      spinIntervals.current[i] = window.setInterval(() => {
+        setReels(prevReels => {
+          const newReels = [...prevReels];
+          newReels[i] = getRandomSymbol();
+          return newReels;
+        });
+      }, 80);
+    }
+    
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => {
+        clearInterval(spinIntervals.current[i]);
+        setReels(prevReels => {
+          const newReels = [...prevReels];
+          newReels[i] = finalReels[i];
+          return newReels;
+        });
+        
+        if (i === 2) {
+            setIsSpinning(false);
+            const [r1, r2, r3] = finalReels;
+            if (r1 === '7️⃣' && r2 === '7️⃣' && r3 === '7️⃣') {
+                setResultMessage('🎉 JACKPOT! 777! 🎉');
+            } else if (r1 === r2 && r2 === r3) {
+                setResultMessage(`🎊 Thắng lớn! 3 ${r1} 🎊`);
+            } else if (r1 === r2 || r2 === r3) {
+                setResultMessage('👍 Thắng nhỏ! 👍');
+            } else {
+                setResultMessage('😭 Chúc bạn may mắn lần sau! 😭');
+            }
+        }
+      }, 1000 + i * 500);
+    }
+  }, [isSpinning]);
+
+  useEffect(() => {
+    return () => spinIntervals.current.forEach(clearInterval);
+  }, []);
+
+  return (
+    <PageContainer title="Máy Quay Ngẫu Nhiên" onBack={onBack}>
+      <div className="bg-gradient-to-b from-purple-500 to-indigo-600 p-6 sm:p-8 rounded-2xl shadow-lg border-4 border-yellow-400 max-w-lg mx-auto">
+        <div className="flex justify-center items-center gap-4 sm:gap-6 mb-6">
+          <Reel symbol={reels[0]} spinning={isSpinning} />
+          <Reel symbol={reels[1]} spinning={isSpinning} />
+          <Reel symbol={reels[2]} spinning={isSpinning} />
+        </div>
+        
+        <div className="text-center min-h-[50px] flex items-center justify-center mb-6">
+            <p className="text-2xl sm:text-3xl text-white font-bold animate-fade-in text-shadow-sm" aria-live="polite">
+                {resultMessage}
+            </p>
+        </div>
+
+        <div className="text-center">
+          <button
+            onClick={handleSpin}
+            disabled={isSpinning}
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-10 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-red-300 disabled:bg-gray-500 disabled:cursor-not-allowed disabled:transform-none text-2xl"
+            aria-label="Quay máy"
+          >
+            {isSpinning ? 'Đang quay...' : 'Quay!'}
+          </button>
+        </div>
+      </div>
+    </PageContainer>
+  );
+};
+
+// --- Movie App ---
+const MovieApp = ({ onBack }: { onBack: () => void }) => {
+  const [movie, setMovie] = useState<string>('');
+  const [key, setKey] = useState<number>(0);
+
+  const getNewMovie = useCallback(() => {
+    const randomIndex = Math.floor(Math.random() * MOVIE_LIST.length);
+    setMovie(MOVIE_LIST[randomIndex]);
+    setKey(prevKey => prevKey + 1);
+  }, []);
+
+  useEffect(() => {
+    getNewMovie();
+  }, [getNewMovie]);
+
+  return (
+    <PageContainer title="Phim Ngẫu Nhiên" onBack={onBack}>
+      <div className="bg-gray-800/80 backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-lg border border-gray-600/50">
+        <div className="text-center min-h-[100px] flex items-center justify-center p-4">
+          {movie && (
+            <p key={key} className="text-xl sm:text-2xl text-yellow-300 font-semibold font-serif animate-fade-in text-shadow-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" className="inline-block h-6 w-6 mr-3 -mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+              </svg>
+              {movie}
+            </p>
+          )}
+        </div>
+        <div className="mt-8 text-center">
+          <button
+            onClick={getNewMovie}
+            className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-yellow-300"
+            aria-label="Xem một phim ngẫu nhiên khác"
+          >
+            Đề xuất phim khác
+          </button>
+        </div>
+      </div>
+    </PageContainer>
+  );
+};
+
+
+// --- Symbol App ---
+const SymbolApp = ({ onBack }: { onBack: () => void }) => {
+  const [symbol, setSymbol] = useState<{ name: string; svg: string; } | null>(null);
+  const [key, setKey] = useState<number>(0);
+
+  const getNewSymbol = useCallback(() => {
+    const randomIndex = Math.floor(Math.random() * SYMBOL_LIST.length);
+    setSymbol(SYMBOL_LIST[randomIndex]);
+    setKey(k => k + 1);
+  }, []);
+
+  useEffect(() => {
+    getNewSymbol();
+  }, [getNewSymbol]);
+
+  return (
+    <PageContainer title="Kí Hiệu Ngẫu Nhiên" onBack={onBack}>
+      <div className="bg-green-50/70 backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-lg border border-green-200/50">
+        <div className="text-center min-h-[250px] flex flex-col items-center justify-center p-4">
+          {symbol && (
+            <div key={key} className="animate-fade-in flex flex-col items-center justify-center">
+              <div
+                className="w-40 h-40 sm:w-48 sm:h-48 text-green-800"
+                dangerouslySetInnerHTML={{ __html: symbol.svg.replace(/width=".*?"/, '').replace(/height=".*?"/, '') }}
+              />
+              <h2 className="text-2xl sm:text-3xl font-bold text-green-900 mt-4 text-shadow-sm">
+                {symbol.name}
+              </h2>
+            </div>
+          )}
+        </div>
+        <div className="mt-8 text-center">
+          <button
+            onClick={getNewSymbol}
+            className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-green-300"
+            aria-label="Xem một kí hiệu ngẫu nhiên khác"
+          >
+            Xem kí hiệu khác
+          </button>
+        </div>
+      </div>
+    </PageContainer>
+  );
+};
+
+// --- Random Number Clicker App ---
+const RandomNumberApp = ({ onBack }: { onBack: () => void }) => {
+  const [number, setNumber] = useState<number>(0);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const intervalRef = useRef<number | null>(null);
+
+  const startGenerator = useCallback(() => {
+    if (isRunning) return;
+    setIsRunning(true);
+    intervalRef.current = window.setInterval(() => {
+      setNumber(Math.floor(Math.random() * 100) + 1);
+    }, 50);
+  }, [isRunning]);
+
+  const stopGenerator = useCallback(() => {
+    if (!isRunning) return;
+    setIsRunning(false);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }, [isRunning]);
+
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <PageContainer title="Bấm Số Ngẫu Nhiên" onBack={onBack}>
+      <div className="bg-orange-50/70 backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-lg border border-orange-200/50 max-w-lg mx-auto">
+        <div className="bg-white/50 w-full h-40 sm:h-48 flex items-center justify-center rounded-lg shadow-inner mb-8">
+          <span className="text-7xl sm:text-8xl font-bold text-orange-800 tabular-nums">
+            {number}
+          </span>
+        </div>
+        <div className="flex justify-center items-center gap-4">
+          <button
+            onClick={startGenerator}
+            disabled={isRunning}
+            className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-orange-300 disabled:bg-orange-400 disabled:cursor-not-allowed disabled:transform-none"
+            aria-label="Bắt đầu chạy số"
+          >
+            Bắt đầu
+          </button>
+          <button
+            onClick={stopGenerator}
+            disabled={!isRunning}
+            className="bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-slate-300 disabled:bg-slate-400 disabled:cursor-not-allowed disabled:transform-none"
+            aria-label="Dừng chạy số"
+          >
+            Dừng
+          </button>
+        </div>
+      </div>
+    </PageContainer>
+  );
+};
+
+// --- Quote App ---
+const QuoteApp = ({ onBack }: { onBack: () => void }) => {
+  const [quote, setQuote] = useState<string>('');
+  const [key, setKey] = useState<number>(0);
+
+  const getNewQuote = useCallback(() => {
+    const randomIndex = Math.floor(Math.random() * QUOTE_LIST.length);
+    setQuote(QUOTE_LIST[randomIndex]);
+    setKey(prevKey => prevKey + 1);
+  }, []);
+
+  useEffect(() => {
+    getNewQuote();
+  }, [getNewQuote]);
+
+  const [mainQuote, author] = quote.split(' - ');
+
+  return (
+    <PageContainer title="Danh Ngôn Ngẫu Nhiên" onBack={onBack}>
+      <div className="bg-stone-50/70 backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-lg border border-stone-200/50">
+        <div className="text-center min-h-[150px] flex items-center justify-center p-4">
+          {quote && (
+            <figure key={key} className="animate-fade-in">
+              <blockquote className="text-xl sm:text-2xl text-stone-800 font-serif italic">
+                “{mainQuote}”
+              </blockquote>
+              {author && (
+                <figcaption className="mt-4 text-lg text-stone-600">
+                  — {author}
+                </figcaption>
+              )}
+            </figure>
+          )}
+        </div>
+        <div className="mt-8 text-center">
+          <button
+            onClick={getNewQuote}
+            className="bg-stone-600 hover:bg-stone-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-stone-300"
+            aria-label="Xem một danh ngôn ngẫu nhiên khác"
+          >
+            Xem danh ngôn khác
+          </button>
+        </div>
+      </div>
+    </PageContainer>
+  );
+};
+
+
+// --- Privacy Policy Page ---
+const PrivacyPolicyPage = ({ onBack }: { onBack: () => void }) => {
+  return (
+    <PageContainer title="Chính Sách Quyền Riêng Tư" onBack={onBack}>
+      <div className="bg-white/70 backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-lg border border-lime-200/50 text-lime-800 text-left space-y-4 prose max-w-none">
+        <p className="text-sm">Cập nhật lần cuối: 13 tháng 10 năm 2025</p>
+        <p>
+          Nguyễn Thành Đạt ("chúng tôi") tôn trọng quyền riêng tư của người dùng ("bạn"). Chính sách này giải thích cách chúng tôi thu thập, sử dụng và bảo vệ thông tin của bạn khi bạn sử dụng ứng dụng web "Sự Ngẫu Nhiên" của chúng tôi.
+        </p>
+
+        <h2 className="text-2xl font-bold text-lime-900 pt-4">Dữ liệu được thu thập</h2>
+        <p>
+          Ứng dụng này được thiết kế để hoạt động mà không cần thu thập thông tin nhận dạng cá nhân (PII) như tên, email hoặc địa chỉ của bạn. Tuy nhiên, một số dữ liệu kỹ thuật có thể được thu thập tự động bởi nhà cung cấp dịch vụ lưu trữ web để duy trì hoạt động và an ninh, bao gồm:
+        </p>
+        <ul className="list-disc list-inside space-y-2 pl-4">
+          <li><strong>Địa chỉ IP:</strong> Để phục vụ yêu cầu truy cập và chẩn đoán sự cố kỹ thuật.</li>
+          <li><strong>Thông tin thiết bị và trình duyệt:</strong> Loại trình duyệt, hệ điều hành để đảm bảo khả năng tương thích.</li>
+          <li><strong>Dữ liệu sử dụng (Phân tích):</strong> Thông tin ẩn danh về cách bạn tương tác với ứng dụng (ví dụ: các tính năng được sử dụng) để giúp chúng tôi cải thiện sản phẩm.</li>
+          <li><strong>Cookies:</strong> Có thể được sử dụng bởi nền tảng lưu trữ để quản lý phiên làm việc.</li>
+        </ul>
+
+        <h2 className="text-2xl font-bold text-lime-900 pt-4">Mục đích sử dụng</h2>
+        <p>
+          Dữ liệu được thu thập chỉ nhằm các mục đích sau:
+        </p>
+        <ul className="list-disc list-inside space-y-2 pl-4">
+          <li>Cung cấp và duy trì hoạt động ổn định của ứng dụng.</li>
+          <li>Phân tích và cải thiện trải nghiệm người dùng.</li>
+          <li>Đảm bảo an ninh và ngăn chặn các hành vi lạm dụng.</li>
+        </ul>
+
+        <h2 className="text-2xl font-bold text-lime-900 pt-4">Bên thứ ba chia sẻ dữ liệu</h2>
+        <p>
+          Chúng tôi không bán hoặc chia sẻ dữ liệu cá nhân của bạn với các bên thứ ba cho mục đích tiếp thị. Dữ liệu kỹ thuật có thể được chia sẻ với:
+        </p>
+        <ul className="list-disc list-inside space-y-2 pl-4">
+          <li><strong>Nhà cung cấp dịch vụ lưu trữ (Hosting):</strong> Nền tảng mà ứng dụng này được triển khai có thể có quyền truy cập vào nhật ký máy chủ.</li>
+          <li><strong>Dịch vụ phân tích (Analytics):</strong> Chúng tôi có thể sử dụng các công cụ như Google Analytics để thu thập dữ liệu sử dụng ẩn danh.</li>
+        </ul>
+        
+        <h2 className="text-2xl font-bold text-lime-900 pt-4">Cách người dùng kiểm soát</h2>
+        <p>
+          Bạn có thể kiểm soát việc thu thập dữ liệu thông qua các cài đặt trên trình duyệt của mình, chẳng hạn như xóa hoặc chặn cookies.
+        </p>
+
+        <h2 className="text-2xl font-bold text-lime-900 pt-4">Thông tin liên hệ</h2>
+        <p>
+          Nếu bạn có bất kỳ câu hỏi nào về chính sách quyền riêng tư này, vui lòng liên hệ với nhà phát triển:
+        </p>
+        <p><strong>Nguyễn Thành Đạt</strong></p>
+        <p>Email: <a href="mailto:tailieuhuyenhoc.com@gmail.com" className="underline">tailieuhuyenhoc.com@gmail.com</a></p>
+      </div>
+    </PageContainer>
+  );
+};
+
 
 // --- Main App / Homepage ---
 const App = () => {
-  const [currentPage, setCurrentPage] = useState<'home' | 'advice' | 'pixel' | 'story' | 'palette' | 'dice' | 'coinFlip' | 'guessNumber' | 'location' | 'sound' | 'song' | 'fact' | 'emoji' | 'password' | 'website'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'advice' | 'pixel' | 'story' | 'palette' | 'dice' | 'coinFlip' | 'guessNumber' | 'location' | 'sound' | 'song' | 'fact' | 'emoji' | 'password' | 'website' | 'decision' | 'slotMachine' | 'movie' | 'symbol' | 'randomNumber' | 'privacy' | 'quote'>('home');
 
   const renderContent = () => {
     switch (currentPage) {
@@ -1171,6 +1769,20 @@ const App = () => {
         return <PasswordApp onBack={() => setCurrentPage('home')} />;
        case 'website':
         return <WebsiteApp onBack={() => setCurrentPage('home')} />;
+      case 'decision':
+        return <DecisionApp onBack={() => setCurrentPage('home')} />;
+      case 'slotMachine':
+        return <SlotMachineApp onBack={() => setCurrentPage('home')} />;
+      case 'movie':
+        return <MovieApp onBack={() => setCurrentPage('home')} />;
+      case 'symbol':
+        return <SymbolApp onBack={() => setCurrentPage('home')} />;
+      case 'randomNumber':
+        return <RandomNumberApp onBack={() => setCurrentPage('home')} />;
+      case 'quote':
+        return <QuoteApp onBack={() => setCurrentPage('home')} />;
+      case 'privacy':
+        return <PrivacyPolicyPage onBack={() => setCurrentPage('home')} />;
       default:
         return (
           <div className="flex flex-col items-center min-h-screen p-4 text-center animate-fade-in">
@@ -1238,10 +1850,39 @@ const App = () => {
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9V3m0 18a9 9 0 009-9m-9 9a9 9 0 00-9-9" /></svg>
                     <span>Website Ngẫu Nhiên</span>
                   </button>
+                  <button onClick={() => setCurrentPage('decision')} className="bg-white/70 hover:bg-white backdrop-blur-sm text-lime-800 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>Quyết Định Ngẫu Nhiên</span>
+                  </button>
+                  <button onClick={() => setCurrentPage('slotMachine')} className="bg-white/70 hover:bg-white backdrop-blur-sm text-lime-800 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
+                    <span>Máy Quay Ngẫu Nhiên</span>
+                  </button>
+                   <button onClick={() => setCurrentPage('movie')} className="bg-white/70 hover:bg-white backdrop-blur-sm text-lime-800 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
+                    <span>Phim Ngẫu Nhiên</span>
+                  </button>
+                   <button onClick={() => setCurrentPage('symbol')} className="bg-white/70 hover:bg-white backdrop-blur-sm text-lime-800 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 11c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 0c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0 0c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3-3zm0 0c1.657 0 3 1.343 3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 0c-1.657 0-3 1.343-3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3z" /></svg>
+                    <span>Kí Hiệu Ngẫu Nhiên</span>
+                  </button>
+                  <button onClick={() => setCurrentPage('randomNumber')} className="bg-white/70 hover:bg-white backdrop-blur-sm text-lime-800 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg>
+                    <span>Bấm Số Ngẫu Nhiên</span>
+                  </button>
+                  <button onClick={() => setCurrentPage('quote')} className="bg-white/70 hover:bg-white backdrop-blur-sm text-lime-800 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5.5 3A2.5 2.5 0 003 5.5V11a2.5 2.5 0 005 0V8.5a.5.5 0 011 0V11a3.5 3.5 0 11-7 0V5.5A3.5 3.5 0 015.5 2h.09a.5.5 0 01.401.595L5.41 4.59a.5.5 0 01-.595.401H5.5zM14.5 3A2.5 2.5 0 0012 5.5V11a2.5 2.5 0 005 0V8.5a.5.5 0 011 0V11a3.5 3.5 0 11-7 0V5.5A3.5 3.5 0 0114.5 2h.09a.5.5 0 01.401.595l-.58 1.99a.5.5 0 01-.595.401h-.001z" clipRule="evenodd" />
+                    </svg>
+                    <span>Danh Ngôn Ngẫu Nhiên</span>
+                  </button>
                 </div>
             </div>
-            <footer className="w-full py-4 text-lime-600 text-sm shrink-0">
-              Phát triển bởi Nguyễn Thành Đạt
+             <footer className="w-full py-4 text-center text-lime-600 text-sm shrink-0">
+              <p>Phát triển bởi Nguyễn Thành Đạt</p>
+              <button onClick={() => setCurrentPage('privacy')} className="underline hover:text-lime-800 transition-colors">
+                Chính sách Quyền riêng tư
+              </button>
             </footer>
           </div>
         );
