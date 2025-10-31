@@ -436,11 +436,59 @@ const QUOTE_LIST: string[] = [
 
 ];
 
+type Emotion = {
+  name: string;
+  type: 'mouth-path' | 'mouth-circle';
+  mouth: string | { cx: string; cy: string; r: string };
+  eyes: 'default' | 'wink';
+};
+
+const EMOTION_LIST: Emotion[] = [
+  { name: 'Vui Vẻ', type: 'mouth-path', mouth: 'M 40 65 Q 50 80 60 65', eyes: 'default' },
+  { name: 'Buồn Bã', type: 'mouth-path', mouth: 'M 40 70 Q 50 55 60 70', eyes: 'default' },
+  { name: 'Ngạc Nhiên', type: 'mouth-circle', mouth: { cx: '50', cy: '70', r: '7' }, eyes: 'default' },
+  { name: 'Bình Thường', type: 'mouth-path', mouth: 'M 40 70 H 60', eyes: 'default' },
+  { name: 'Tinh Nghịch', type: 'mouth-path', mouth: 'M 40 65 Q 50 75 60 65', eyes: 'wink' },
+];
+
 
 const UPPERCASE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const LOWERCASE_CHARS = 'abcdefghijklmnopqrstuvwxyz';
 const NUMBER_CHARS = '0123456789';
 const SYMBOL_CHARS = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+const QUESTION_LIST: string[] = [
+    "Nếu bạn có thể có bất kỳ siêu năng lực nào, đó sẽ là gì?",
+    "Ký ức tuổi thơ yêu thích nhất của bạn là gì?",
+    "Nếu bạn có thể ăn tối với bất kỳ ai, còn sống hay đã mất, đó sẽ là ai?",
+    "Điều gì bạn học được gần đây khiến bạn ngạc nhiên?",
+    "Nếu tiền không phải là vấn đề, bạn sẽ làm gì với cuộc sống của mình?",
+    "Cuốn sách hoặc bộ phim nào đã thay đổi cách nhìn của bạn về thế giới?",
+    "Nơi nào trên thế giới bạn muốn đến thăm nhất?",
+    "Thành tựu nào khiến bạn tự hào nhất?",
+    "Nếu bạn có thể đưa ra một lời khuyên cho bản thân lúc trẻ, đó sẽ là gì?",
+    "Điều gì nhỏ nhặt trong cuộc sống mang lại cho bạn niềm vui lớn nhất?",
+    "Bạn sẽ mô tả một ngày hoàn hảo của mình như thế nào?",
+    "Tài năng tiềm ẩn của bạn là gì?",
+    "Nếu bạn có thể sống trong bất kỳ vũ trụ hư cấu nào, bạn sẽ chọn vũ trụ nào?",
+    "Mục tiêu lớn nhất của bạn trong năm nay là gì?",
+    "Điều gì khiến bạn cười mà không cần lý do?",
+    "Nếu bạn là một con vật, bạn sẽ là con gì?",
+    "Bài hát nào luôn khiến bạn cảm thấy tốt hơn?",
+    "Nỗi sợ hãi lớn nhất của bạn là gì?",
+    "Bạn định nghĩa thành công như thế nào?",
+    "Nếu bạn có thể giải quyết một vấn đề trên thế giới, đó sẽ là vấn đề gì?",
+    "Món ăn nào bạn có thể ăn mỗi ngày mà không chán?",
+    "Bạn biết ơn điều gì nhất trong cuộc sống hiện tại?",
+    "Điều gì bạn muốn mọi người hiểu hơn về bạn?",
+    "Nếu bạn có một cỗ máy thời gian, bạn sẽ đi đến tương lai hay quá khứ?",
+    "Thói quen hàng ngày quan trọng nhất của bạn là gì?",
+    "Bạn thích mùa nào nhất trong năm và tại sao?",
+    "Nếu bạn có thể học một kỹ năng mới ngay lập tức, đó sẽ là gì?",
+    "Điều gì truyền cảm hứng cho bạn nhiều nhất?",
+    "Bạn thích ở một mình hay ở cùng người khác hơn?",
+    "Mùi hương nào gợi cho bạn những kỷ niệm đẹp?",
+];
 
 
 // --- Helper Components ---
@@ -1370,6 +1418,45 @@ const DecisionApp = ({ onBack }: { onBack: () => void }) => {
   );
 };
 
+// --- Question App ---
+const QuestionApp = ({ onBack }: { onBack: () => void }) => {
+  const [question, setQuestion] = useState<string>('');
+  const [key, setKey] = useState<number>(0);
+
+  const getNewQuestion = useCallback(() => {
+    const randomIndex = Math.floor(Math.random() * QUESTION_LIST.length);
+    setQuestion(QUESTION_LIST[randomIndex]);
+    setKey(prevKey => prevKey + 1);
+  }, []);
+
+  useEffect(() => {
+    getNewQuestion();
+  }, [getNewQuestion]);
+
+  return (
+    <PageContainer title="Câu Hỏi Ngẫu Nhiên" onBack={onBack}>
+      <div className="bg-purple-50/70 backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-lg border border-purple-200/50">
+        <div className="text-center min-h-[100px] flex items-center justify-center p-4">
+          {question && (
+            <p key={key} className="text-xl sm:text-2xl text-purple-800 font-medium animate-fade-in text-shadow-sm">
+               "{question}"
+            </p>
+          )}
+        </div>
+        <div className="mt-8 text-center">
+          <button
+            onClick={getNewQuestion}
+            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-purple-300"
+            aria-label="Xem một câu hỏi ngẫu nhiên mới"
+          >
+            Câu hỏi khác
+          </button>
+        </div>
+      </div>
+    </PageContainer>
+  );
+};
+
 // --- Slot Machine App ---
 const SLOT_SYMBOLS = [
   '🍒', '🍋', '🍊', '🍉', '🔔', '⭐', '💎', '🍀',
@@ -1511,7 +1598,7 @@ const MovieApp = ({ onBack }: { onBack: () => void }) => {
           <button
             onClick={getNewMovie}
             className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-yellow-300"
-            aria-label="Xem một phim ngẫu nhiên khác"
+            aria-label="Đề xuất phim khác"
           >
             Đề xuất phim khác
           </button>
@@ -1629,6 +1716,170 @@ const RandomNumberApp = ({ onBack }: { onBack: () => void }) => {
   );
 };
 
+// --- Random Timer App ---
+const RandomTimerApp = ({ onBack }: { onBack: () => void }) => {
+  const [time, setTime] = useState({ seconds: 0, centiseconds: 0 });
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const intervalRef = useRef<number | null>(null);
+
+  const startGenerator = useCallback(() => {
+    if (isRunning) return;
+    setIsRunning(true);
+    intervalRef.current = window.setInterval(() => {
+      setTime({
+        seconds: Math.floor(Math.random() * 100),
+        centiseconds: Math.floor(Math.random() * 100)
+      });
+    }, 50);
+  }, [isRunning]);
+
+  const stopGenerator = useCallback(() => {
+    if (!isRunning) return;
+    setIsRunning(false);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }, [isRunning]);
+
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+  
+  const formattedSeconds = String(time.seconds).padStart(2, '0');
+  const formattedCentiseconds = String(time.centiseconds).padStart(2, '0');
+
+  return (
+    <PageContainer title="Bấm Giờ Ngẫu Nhiên" onBack={onBack}>
+      <div className="bg-red-50/70 backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-lg border border-red-200/50 max-w-lg mx-auto">
+        <div className="bg-white/50 w-full h-40 sm:h-48 flex items-center justify-center rounded-lg shadow-inner mb-8">
+          <span className="text-7xl sm:text-8xl font-bold text-red-800 font-mono tabular-nums">
+            {formattedSeconds}:{formattedCentiseconds}
+          </span>
+        </div>
+        <div className="flex justify-center items-center gap-4">
+          <button
+            onClick={startGenerator}
+            disabled={isRunning}
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-red-300 disabled:bg-red-400 disabled:cursor-not-allowed disabled:transform-none"
+            aria-label="Bắt đầu bấm giờ"
+          >
+            Bắt đầu
+          </button>
+          <button
+            onClick={stopGenerator}
+            disabled={!isRunning}
+            className="bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-slate-300 disabled:bg-slate-400 disabled:cursor-not-allowed disabled:transform-none"
+            aria-label="Dừng bấm giờ"
+          >
+            Dừng
+          </button>
+        </div>
+      </div>
+    </PageContainer>
+  );
+};
+
+// --- Random Clock App ---
+const RandomClockApp = ({ onBack }: { onBack: () => void }) => {
+  const [time, setTime] = useState(0); // Total elapsed virtual seconds
+  const [isRunning, setIsRunning] = useState(false);
+  const animationFrameRef = useRef<number | null>(null);
+  const lastTimestampRef = useRef<number | null>(null);
+
+  const toggleClock = useCallback(() => {
+    if (isRunning) {
+      setIsRunning(false);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+      lastTimestampRef.current = null;
+    } else {
+      setIsRunning(true);
+      lastTimestampRef.current = performance.now();
+      
+      const animate = (timestamp: number) => {
+        if (lastTimestampRef.current) {
+          const deltaTime = (timestamp - lastTimestampRef.current) / 1000; // in seconds
+          const speedMultiplier = 4320; // Fast speed
+          setTime(prevTime => prevTime + deltaTime * speedMultiplier);
+        }
+        lastTimestampRef.current = timestamp;
+        animationFrameRef.current = requestAnimationFrame(animate);
+      };
+
+      animationFrameRef.current = requestAnimationFrame(animate);
+    }
+  }, [isRunning]);
+
+  useEffect(() => {
+    // Cleanup on unmount
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, []);
+
+  const totalSeconds = time;
+  const seconds = totalSeconds % 60;
+  const minutes = (totalSeconds / 60) % 60;
+  const hours = (totalSeconds / 3600) % 12;
+
+  const secondHandRotation = (seconds / 60) * 360;
+  const minuteHandRotation = (minutes / 60) * 360 + (seconds / 60) * 6;
+  const hourHandRotation = (hours / 12) * 360 + (minutes / 60) * 30;
+
+  return (
+    <PageContainer title="Đồng Hồ Ngẫu Nhiên" onBack={onBack}>
+      <div className="bg-gray-50/70 backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-lg border border-gray-200/50 max-w-lg mx-auto flex flex-col items-center">
+        <div className="w-64 h-64 sm:w-80 sm:h-80 mx-auto bg-white rounded-full relative shadow-inner border-4 border-gray-300 mb-8">
+          {/* Hour markers */}
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div
+              key={`hour-marker-${i}`}
+              className="absolute w-full h-full"
+              style={{ transform: `rotate(${i * 30}deg)` }}
+            >
+              <div className={`absolute top-2 left-1/2 -translate-x-1/2 rounded-full ${i % 3 === 0 ? 'w-1.5 h-6 bg-gray-700' : 'w-1 h-4 bg-gray-400'}`} />
+            </div>
+          ))}
+
+          {/* Hands */}
+          <div
+            className="absolute bottom-1/2 left-1/2 w-1.5 h-16 sm:h-20 bg-gray-800 origin-bottom rounded-t-full"
+            style={{ transform: `translateX(-50%) rotate(${hourHandRotation}deg)`}}
+          />
+          <div
+            className="absolute bottom-1/2 left-1/2 w-1 h-24 sm:h-32 bg-gray-600 origin-bottom rounded-t-full"
+            style={{ transform: `translateX(-50%) rotate(${minuteHandRotation}deg)` }}
+          />
+          <div
+            className="absolute bottom-1/2 left-1/2 w-0.5 h-24 sm:h-32 bg-red-600 origin-bottom"
+            style={{ transform: `translateX(-50%) rotate(${secondHandRotation}deg)` }}
+          />
+          {/* Center dot */}
+          <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-gray-800 rounded-full -translate-x-1/2 -translate-y-1/2 z-10 border-2 border-white" />
+        </div>
+        <div className="text-center">
+          <button
+            onClick={toggleClock}
+            className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-gray-300 w-40"
+            aria-label={isRunning ? "Dừng đồng hồ" : "Chạy nhanh đồng hồ"}
+          >
+            {isRunning ? 'Dừng Lại' : 'Chạy Nhanh'}
+          </button>
+        </div>
+      </div>
+    </PageContainer>
+  );
+};
+
 // --- Quote App ---
 const QuoteApp = ({ onBack }: { onBack: () => void }) => {
   const [quote, setQuote] = useState<string>('');
@@ -1670,6 +1921,221 @@ const QuoteApp = ({ onBack }: { onBack: () => void }) => {
             aria-label="Xem một danh ngôn ngẫu nhiên khác"
           >
             Xem danh ngôn khác
+          </button>
+        </div>
+      </div>
+    </PageContainer>
+  );
+};
+
+// --- Random Wheel App ---
+const WHEEL_ITEMS = [
+  { emoji: '🍒', points: 10, color: '#ef4444' },
+  { emoji: '💎', points: 100, color: '#3b82f6' },
+  { emoji: '🍋', points: 5, color: '#facc15' },
+  { emoji: '🍀', points: 20, color: '#22c55e' },
+  { emoji: '💀', points: 0, color: '#6b7280' },
+  { emoji: '⭐', points: 50, color: '#f97316' },
+  { emoji: '🍒', points: 10, color: '#ef4444' },
+  { emoji: '💎', points: 100, color: '#3b82f6' },
+];
+
+const RandomWheelApp = ({ onBack }: { onBack: () => void }) => {
+  const [rotation, setRotation] = useState(0);
+  const [spinning, setSpinning] = useState(false);
+  const [spinCount, setSpinCount] = useState(0);
+  const [totalScore, setTotalScore] = useState(0);
+  const [results, setResults] = useState<(typeof WHEEL_ITEMS)[0][]>([]);
+  const [message, setMessage] = useState('Nhấn "Quay" để bắt đầu!');
+  const timeoutRef = useRef<number | null>(null);
+  
+  const SEGMENT_COUNT = WHEEL_ITEMS.length;
+  const SEGMENT_ANGLE = 360 / SEGMENT_COUNT;
+
+  const gradientParts = WHEEL_ITEMS.map((item, index) => {
+    const startAngle = index * SEGMENT_ANGLE;
+    const endAngle = (index + 1) * SEGMENT_ANGLE;
+    return `${item.color} ${startAngle}deg ${endAngle}deg`;
+  });
+  const conicGradientStyle = {
+    background: `conic-gradient(from -${SEGMENT_ANGLE / 2}deg, ${gradientParts.join(', ')})`,
+  };
+
+  const resetGame = () => {
+    setSpinning(false);
+    setSpinCount(0);
+    setTotalScore(0);
+    setResults([]);
+    setMessage('Nhấn "Quay" để bắt đầu!');
+  };
+
+  const handleSpin = useCallback(() => {
+    if (spinning) return;
+    if (spinCount >= 3) {
+      resetGame();
+      return;
+    }
+
+    setSpinning(true);
+    setMessage('...');
+    
+    const winningIndex = Math.floor(Math.random() * SEGMENT_COUNT);
+    // Align the middle of the segment with the top pointer (270deg or -90deg)
+    const targetRotation = -(winningIndex * SEGMENT_ANGLE);
+    
+    const extraTurns = 5 * 360;
+    const newRotation = rotation - (rotation % 360) + extraTurns + targetRotation;
+    
+    setRotation(newRotation);
+
+    timeoutRef.current = window.setTimeout(() => {
+      const winner = WHEEL_ITEMS[winningIndex];
+      const newScore = totalScore + winner.points;
+      const newSpinCount = spinCount + 1;
+      const newResults = [...results, winner];
+
+      setTotalScore(newScore);
+      setSpinCount(newSpinCount);
+      setResults(newResults);
+      setSpinning(false);
+
+      if (newSpinCount === 3) {
+        setMessage(`Kết thúc! Tổng điểm của bạn là ${newScore}.`);
+      } else {
+        setMessage(`Bạn trúng ${winner.emoji}! +${winner.points} điểm.`);
+      }
+    }, 4000); // Match this duration with the CSS transition
+  }, [spinning, spinCount, totalScore, results, rotation, SEGMENT_ANGLE, SEGMENT_COUNT]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <PageContainer title="Vòng Quay Ngẫu Nhiên" onBack={onBack}>
+      <div className="bg-yellow-400 p-2 sm:p-3 rounded-2xl shadow-lg max-w-sm mx-auto">
+        <div className="bg-gradient-to-b from-blue-400 to-blue-600 p-4 sm:p-6 rounded-xl">
+          <div className="relative w-64 h-64 sm:w-72 sm:h-72 mx-auto mb-4 flex items-center justify-center">
+            {/* Pointer */}
+            <div className="absolute -top-2 z-20" style={{
+              width: 0,
+              height: 0,
+              borderLeft: '15px solid transparent',
+              borderRight: '15px solid transparent',
+              borderTop: '25px solid #facc15', // yellow-400
+            }} />
+            
+            {/* Wheel */}
+            <div 
+              className="relative w-full h-full rounded-full border-8 border-yellow-400 shadow-xl transition-transform duration-[4000ms] ease-out"
+              style={{...conicGradientStyle, transform: `rotate(${rotation}deg)` }}
+            >
+              {WHEEL_ITEMS.map((item, index) => {
+                const angle = index * SEGMENT_ANGLE;
+                return (
+                  <div 
+                    key={index} 
+                    className="absolute top-0 left-0 w-full h-full flex justify-center"
+                    style={{ transform: `rotate(${angle}deg)`}}
+                  >
+                    <span className="text-3xl sm:text-4xl absolute" style={{ marginTop: '1.2rem', transform: `rotate(${SEGMENT_ANGLE * 1.5}deg)` }}>
+                      {item.emoji}
+                    </span>
+                  </div>
+                );
+              })}
+               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-yellow-400 rounded-full border-4 border-yellow-500 shadow-inner z-10" />
+            </div>
+          </div>
+
+          <div className="bg-blue-800/40 p-4 rounded-lg text-center space-y-2 mb-6">
+              <p className="text-xl text-white font-bold">Lượt quay: <span className="text-yellow-300 text-2xl">{spinCount} / 3</span></p>
+              <p className="text-2xl text-white font-bold">Tổng điểm: <span className="text-yellow-300 text-3xl">{totalScore}</span></p>
+              <div className="min-h-[40px] flex items-center justify-center text-3xl space-x-2">
+                {results.map((r, i) => <span key={i}>{r.emoji}</span>)}
+              </div>
+              <div className="min-h-[28px] flex items-center justify-center">
+                <p className="text-lg text-white font-semibold" aria-live="polite">
+                  {message}
+                </p>
+              </div>
+          </div>
+
+          <div className="text-center">
+            <button
+              onClick={handleSpin}
+              disabled={spinning}
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-10 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-red-300 disabled:bg-gray-500 disabled:cursor-not-allowed disabled:transform-none text-2xl"
+              aria-label={spinCount < 3 ? 'Quay vòng quay' : 'Chơi lại'}
+            >
+              {spinCount < 3 ? 'Quay!' : 'Chơi lại'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </PageContainer>
+  );
+};
+
+// --- Emotion App ---
+const EmotionApp = ({ onBack }: { onBack: () => void }) => {
+  const [emotion, setEmotion] = useState<Emotion | null>(null);
+  const [key, setKey] = useState<number>(0);
+
+  const getNewEmotion = useCallback(() => {
+    const randomIndex = Math.floor(Math.random() * EMOTION_LIST.length);
+    setEmotion(EMOTION_LIST[randomIndex]);
+    setKey(k => k + 1);
+  }, []);
+
+  useEffect(() => {
+    getNewEmotion();
+  }, [getNewEmotion]);
+
+  return (
+    <PageContainer title="Cảm Xúc Ngẫu Nhiên" onBack={onBack}>
+      <div className="bg-rose-50/70 backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-lg border border-rose-200/50">
+        <div className="text-center min-h-[250px] flex flex-col items-center justify-center p-4">
+          {emotion && (
+            <div key={key} className="animate-fade-in flex flex-col items-center justify-center">
+              <svg viewBox="0 0 100 100" className="w-48 h-48 sm:w-56 sm:h-56">
+                <circle cx="50" cy="50" r="45" fill="#FFD700" stroke="#E5C100" strokeWidth="3" />
+                {/* Eyes */}
+                {emotion.eyes === 'wink' ? (
+                  <>
+                    <circle cx="35" cy="45" r="5" fill="black" />
+                    <path d="M 60 45 Q 65 50 70 45" stroke="black" strokeWidth="3" fill="none" strokeLinecap="round" />
+                  </>
+                ) : (
+                  <>
+                    <circle cx="35" cy="45" r="5" fill="black" />
+                    <circle cx="65" cy="45" r="5" fill="black" />
+                  </>
+                )}
+                {/* Mouth */}
+                {emotion.type === 'mouth-circle' && typeof emotion.mouth === 'object' ? (
+                  <circle {...emotion.mouth} fill="black" />
+                ) : (
+                  <path d={emotion.mouth as string} stroke="black" strokeWidth="3" fill="none" strokeLinecap="round" />
+                )}
+              </svg>
+              <h2 className="text-2xl sm:text-3xl font-bold text-rose-900 mt-4 text-shadow-sm">
+                {emotion.name}
+              </h2>
+            </div>
+          )}
+        </div>
+        <div className="mt-8 text-center">
+          <button
+            onClick={getNewEmotion}
+            className="bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-rose-300"
+            aria-label="Tạo một cảm xúc ngẫu nhiên mới"
+          >
+            Tạo Cảm Xúc Mới
           </button>
         </div>
       </div>
@@ -1737,7 +2203,7 @@ const PrivacyPolicyPage = ({ onBack }: { onBack: () => void }) => {
 
 // --- Main App / Homepage ---
 const App = () => {
-  const [currentPage, setCurrentPage] = useState<'home' | 'advice' | 'pixel' | 'story' | 'palette' | 'dice' | 'coinFlip' | 'guessNumber' | 'location' | 'sound' | 'song' | 'fact' | 'emoji' | 'password' | 'website' | 'decision' | 'slotMachine' | 'movie' | 'symbol' | 'randomNumber' | 'privacy' | 'quote'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'advice' | 'pixel' | 'story' | 'palette' | 'dice' | 'coinFlip' | 'guessNumber' | 'location' | 'sound' | 'song' | 'fact' | 'emoji' | 'password' | 'website' | 'decision' | 'slotMachine' | 'movie' | 'symbol' | 'randomNumber' | 'privacy' | 'quote' | 'randomWheel' | 'randomTimer' | 'randomClock' | 'emotion' | 'question'>('home');
 
   const renderContent = () => {
     switch (currentPage) {
@@ -1771,6 +2237,8 @@ const App = () => {
         return <WebsiteApp onBack={() => setCurrentPage('home')} />;
       case 'decision':
         return <DecisionApp onBack={() => setCurrentPage('home')} />;
+      case 'question':
+        return <QuestionApp onBack={() => setCurrentPage('home')} />;
       case 'slotMachine':
         return <SlotMachineApp onBack={() => setCurrentPage('home')} />;
       case 'movie':
@@ -1779,8 +2247,16 @@ const App = () => {
         return <SymbolApp onBack={() => setCurrentPage('home')} />;
       case 'randomNumber':
         return <RandomNumberApp onBack={() => setCurrentPage('home')} />;
+      case 'randomTimer':
+        return <RandomTimerApp onBack={() => setCurrentPage('home')} />;
+      case 'randomClock':
+        return <RandomClockApp onBack={() => setCurrentPage('home')} />;
       case 'quote':
         return <QuoteApp onBack={() => setCurrentPage('home')} />;
+      case 'randomWheel':
+        return <RandomWheelApp onBack={() => setCurrentPage('home')} />;
+      case 'emotion':
+        return <EmotionApp onBack={() => setCurrentPage('home')} />;
       case 'privacy':
         return <PrivacyPolicyPage onBack={() => setCurrentPage('home')} />;
       default:
@@ -1839,7 +2315,7 @@ const App = () => {
                     <span>Sự Thật Ngẫu Nhiên</span>
                   </button>
                   <button onClick={() => setCurrentPage('emoji')} className="bg-white/70 hover:bg-white backdrop-blur-sm text-lime-800 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547a2 2 0 00-.547 1.806l.477 2.387a6 6 0 00.517 3.86l.158.318a6 6 0 003.86.517l2.387.477a2 2 0 001.806-.547a2 2 0 00.547-1.806l-.477-2.387a6 6 0 00-.517-3.86l-.158-.318a6 6 0 01-.517-3.86l.477-2.387a2 2 0 00.547-1.806z" /><path strokeLinecap="round" strokeLinejoin="round" d="M12 8a2 2 0 01-2 2h-2a2 2 0 01-2-2V6a2 2 0 012-2h2a2 2 0 012 2v2z" /></svg>
                     <span>Bộ Tạo Biểu Cảm Ngẫu Nhiên</span>
                   </button>
                    <button onClick={() => setCurrentPage('password')} className="bg-white/70 hover:bg-white backdrop-blur-sm text-lime-800 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3">
@@ -1853,6 +2329,10 @@ const App = () => {
                   <button onClick={() => setCurrentPage('decision')} className="bg-white/70 hover:bg-white backdrop-blur-sm text-lime-800 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     <span>Quyết Định Ngẫu Nhiên</span>
+                  </button>
+                  <button onClick={() => setCurrentPage('question')} className="bg-white/70 hover:bg-white backdrop-blur-sm text-lime-800 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>Câu Hỏi Ngẫu Nhiên</span>
                   </button>
                   <button onClick={() => setCurrentPage('slotMachine')} className="bg-white/70 hover:bg-white backdrop-blur-sm text-lime-800 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
@@ -1870,19 +2350,38 @@ const App = () => {
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg>
                     <span>Bấm Số Ngẫu Nhiên</span>
                   </button>
+                  <button onClick={() => setCurrentPage('randomTimer')} className="bg-white/70 hover:bg-white backdrop-blur-sm text-lime-800 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>Bấm Giờ Ngẫu Nhiên</span>
+                  </button>
+                  <button onClick={() => setCurrentPage('randomClock')} className="bg-white/70 hover:bg-white backdrop-blur-sm text-lime-800 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>Đồng Hồ Ngẫu Nhiên</span>
+                  </button>
                   <button onClick={() => setCurrentPage('quote')} className="bg-white/70 hover:bg-white backdrop-blur-sm text-lime-800 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M5.5 3A2.5 2.5 0 003 5.5V11a2.5 2.5 0 005 0V8.5a.5.5 0 011 0V11a3.5 3.5 0 11-7 0V5.5A3.5 3.5 0 015.5 2h.09a.5.5 0 01.401.595L5.41 4.59a.5.5 0 01-.595.401H5.5zM14.5 3A2.5 2.5 0 0012 5.5V11a2.5 2.5 0 005 0V8.5a.5.5 0 011 0V11a3.5 3.5 0 11-7 0V5.5A3.5 3.5 0 0114.5 2h.09a.5.5 0 01.401.595l-.58 1.99a.5.5 0 01-.595.401h-.001z" clipRule="evenodd" />
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" /></svg>
                     <span>Danh Ngôn Ngẫu Nhiên</span>
+                  </button>
+                  <button onClick={() => setCurrentPage('randomWheel')} className="bg-white/70 hover:bg-white backdrop-blur-sm text-lime-800 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
+                    <span>Vòng Quay Ngẫu Nhiên</span>
+                  </button>
+                  <button onClick={() => setCurrentPage('emotion')} className="bg-white/70 hover:bg-white backdrop-blur-sm text-lime-800 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>Cảm Xúc Ngẫu Nhiên</span>
                   </button>
                 </div>
             </div>
-             <footer className="w-full py-4 text-center text-lime-600 text-sm shrink-0">
-              <p>Phát triển bởi Nguyễn Thành Đạt</p>
-              <button onClick={() => setCurrentPage('privacy')} className="underline hover:text-lime-800 transition-colors">
-                Chính sách Quyền riêng tư
-              </button>
+            <footer className="w-full max-w-4xl text-center py-6 mt-auto">
+                <button 
+                    onClick={() => setCurrentPage('privacy')} 
+                    className="text-lime-700 hover:text-lime-900 hover:underline transition-colors duration-300 mb-2"
+                >
+                    Chính Sách Quyền Riêng Tư
+                </button>
+                <p className="text-sm text-lime-600">
+                  © 2025 Nguyễn Thành Đạt. Mọi quyền được bảo lưu.
+                </p>
             </footer>
           </div>
         );
